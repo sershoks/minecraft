@@ -3,8 +3,6 @@ provider "google" {
   region  = "europe-west9"  # Région Paris
 }
 
-variable "team_name" {}
-
 resource "google_compute_instance" "bungeecord" {
   name         = "bungeecord-${var.team_name}"
   machine_type = "e2-micro"
