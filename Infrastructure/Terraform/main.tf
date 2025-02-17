@@ -1,11 +1,7 @@
-data "google_secret_manager_secret_version" "credentials" {
-  name = "projects/649751663521/secrets/ServiceAccountJSON/versions/1"
-}
-
 provider "google" {
   project = "glowing-road-451209-k6"
   region  = "europe-west9"  # Région Paris
-  credentials = base64decode(data.google_secret_manager_secret_version.credentials.secret_data)
+  credentials = "projects/649751663521/secrets/ServiceAccountJSON/versions/1"
 }
 
 resource "google_compute_instance" "bungeecord" {
