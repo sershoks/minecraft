@@ -1,12 +1,12 @@
 provider "google" {
-  project = "your-gcp-project"
-  region  = "us-central1"
+  project = "minecraft"
+  region  = "europe-west-9b"
 }
 
 resource "google_compute_instance" "bungeecord" {
   name         = "bungeecord-proxy"
   machine_type = "e2-medium"
-  zone         = "us-central1-a"
+  zone         = "europe-west-9b"
 
   boot_disk {
     initialize_params {
