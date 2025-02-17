@@ -6,7 +6,7 @@ steps:
 
   # Étape 2 : Déployer les Cloud Functions
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['functions', 'deploy', 'createSpigotServer', '--runtime', 'nodejs14', '--trigger-http', '--allow-unauthenticated', '--entry-point', 'createSpigotServer', '--region', 'europe-west-9', '--memory', '256MB']
+    args: ['functions', 'deploy', 'createSpigotServer', '--runtime', 'nodejs14', '--trigger-http', '--allow-unauthenticated', '--entry-point', 'createSpigotServer', '--region', 'europe-west-1', '--memory', '256MB']
     dir: 'cloud-functions/src'
 
   # Étape 3 : Initialiser Terraform
