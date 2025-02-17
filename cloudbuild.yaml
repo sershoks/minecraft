@@ -2,12 +2,12 @@ steps:
   # Étape 1 : Installer les dépendances pour les Cloud Functions
   - name: 'gcr.io/cloud-builders/npm'
     args: ['install']
-    dir: 'cloud-functions/src'
+    dir: 'Infrastructure/'
 
   # Étape 2 : Déployer les Cloud Functions
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['functions', 'deploy', 'createSpigotServer', '--runtime', 'nodejs14', '--trigger-http', '--allow-unauthenticated', '--entry-point', 'createSpigotServer', '--region', 'europe-west1', '--memory', '256MB']
-    dir: 'cloud-functions/src'
+    dir: 'Infrastructure/'
 
   # Étape 3 : Initialiser Terraform
   - name: 'hashicorp/terraform:latest'
