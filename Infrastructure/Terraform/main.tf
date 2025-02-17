@@ -1,12 +1,20 @@
 provider "google" {
   project = "minecraft"
-  region  = "europe-west-9b"
+  region  = "europe-west1"  # Région Paris
 }
 
+variable "team_name" {}
+
 resource "google_compute_instance" "bungeecord" {
-  name         = "bungeecord-proxy"
-  machine_type = "e2-medium"
-  zone         = "europe-west-9b"
+  name         = "bungeecord-${var.team_name}"
+  machine_type = "e2-micro"
+  zone         = "europe-west1-b"  # Zone Paris
+
+  network_interface {
+    network    = "default"
+    subnetwork = "default"
+    access_config {}
+  }
 
   boot_disk {
     initialize_params {
@@ -14,18 +22,23 @@ resource "google_compute_instance" "bungeecord" {
     }
   }
 
-  network_interface {
-    network = "default"
-    access_config {} # IP publique
-  }
-
   metadata = {
     ssh-keys = "your-ssh-user:ssh-rsa AAAAB3..."
   }
 
   tags = ["bungeecord"]
+
+  metadata_startup_script = <<EOT
+    #!/bin/bash
+    apt update && apt install -y openjdk-17-jdk wget screen
+    mkdir -p /opt/minecraft
+    cd /opt/minecraft
+    wget https://download.getbukkit.org/spigot/spigot-1.20.1.jar -O bungeecord.jar
+    echo "eula=true" > eula.txt
+    screen -dmS bungeecord java -Xmx512M -jar bungeecord.jar nogui
+  EOT
 }
 
-output "bungeecord_ip" {
-  value = google_compute_instance.bungeecord.network_interface[0].access_config[0].nat_ip
+output "bungeecord_internal_ip" {
+  value = google_compute_instance.bungeecord.network_interface[0].network_ip
 }
