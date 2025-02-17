@@ -4,6 +4,7 @@ const client = new CloudBuildClient();
 
 exports.createSpigotServer = async (req, res) => {
     const teamData = req.body;
+    console.log(teamData);
     const teamName = teamData.name.toLowerCase().replace(/\s/g, "-");
     const players = teamData.players;
 
