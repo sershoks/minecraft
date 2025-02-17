@@ -37,8 +37,7 @@ exports.createSpigotServer = async (req, res) => {
                         `-var=player4=${players[3]}`
                     ]
                 }
-            ],
-            timeout: "120s",
+            ]
         }
     };
 
