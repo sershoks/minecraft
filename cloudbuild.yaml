@@ -26,7 +26,7 @@ steps:
 
   # Étape 4 : Appliquer la configuration Terraform avec la variable
   - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-var=team_name=$_TEAM_NAME', '-auto-approve']
+    args: ['apply','-auto-approve']
     dir: 'terraform'
     env:
       - 'GOOGLE_CREDENTIALS=$$GCP_SA_KEY'
