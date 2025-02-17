@@ -9,42 +9,38 @@ steps:
     args: ['functions', 'deploy', 'createSpigotServer', '--runtime', 'nodejs20', '--trigger-http', '--allow-unauthenticated', '--entry-point', 'createSpigotServer', '--region', 'europe-west1', '--memory', '256MB']
     dir: 'Fonctions/'
 
-  # Étape 3 : Initialiser Terraform
+  # Étape 3 : Initialiser et Appliquer Terraform
   - name: 'hashicorp/terraform:latest'
     args: ['init']
+    dir: 'terraform'
+
   - name: 'hashicorp/terraform:latest'
     args: [
         'apply',
         '-auto-approve',
-        '-var=team_name=$TEAM_NAME',
-        '-var=player1=$PLAYER1',
-        '-var=player2=$PLAYER2',
-        '-var=player3=$PLAYER3',
-        '-var=player4=$PLAYER4'
+        '-var=team_name=$_TEAM_NAME',
+        '-var=player1=$_PLAYER1',
+        '-var=player2=$_PLAYER2',
+        '-var=player3=$_PLAYER3',
+        '-var=player4=$_PLAYER4'
     ]
-    dir: 'terraform'
-
-  # Étape 4 : Appliquer la configuration Terraform avec la variable
-  - name: 'hashicorp/terraform:latest'
-    args: ['apply','-auto-approve']
     dir: 'terraform'
     env:
       - 'GOOGLE_CREDENTIALS=$$GCP_SA_KEY'
 
-  # Étape 5 : Déployer le script Google Apps
+  # Étape 4 : Déployer le script Google Apps
   - name: 'gcr.io/cloud-builders/gcloud'
     args: ['apps', 'deploy', '--project', 'glowing-road-451209-k6']
     dir: 'scripts'
 
 # Définir les substitutions pour les variables d'environnement
-substitutions: 
-
-  _TEAM_NAME: ''
-  _PLAYER1: ''
-  _PLAYER2: ''
-  _PLAYER3: ''
-  _PLAYER4: ''
-  _GCP_SA_KEY: 'YOUR_SERVICE_ACCOUNT_KEY'
+substitutions:
+  _TEAM_NAME: ''  # Remplacez par le nom de l'équipe
+  _PLAYER1: ''    # Remplacez par le nom du joueur 1
+  _PLAYER2: ''    # Remplacez par le nom du joueur 2
+  _PLAYER3: ''    # Remplacez par le nom du joueur 3
+  _PLAYER4: ''    # Remplacez par le nom du joueur 4
+  _GCP_SA_KEY: 'YOUR_SERVICE_ACCOUNT_KEY'  # Remplacez par votre clé de compte de service
 
 # Définir les images à construire (optionnel)
 images:
