@@ -1,7 +1,7 @@
 resource "google_compute_instance" "spigot" {
   name         = "spigot-${var.team_name}"
   machine_type = "e2-micro"
-  zone         = "europe-west1-b"  # Zone Paris
+  zone         = "europe-west9-c"  # Zone Paris
 
   network_interface {
     network    = "default"
