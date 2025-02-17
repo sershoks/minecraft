@@ -1,6 +1,4 @@
-const { CloudBuildClient } = require('@google-cloud/cloudbuild');
-
-const client = new CloudBuildClient();
+const { exec } = require("child_process");
 
 exports.createSpigotServer = async (req, res) => {
     const teamData = req.body;
@@ -8,9 +6,9 @@ exports.createSpigotServer = async (req, res) => {
     const teamName = teamData.name.toLowerCase().replace(/\s/g, "-");
     const players = teamData.players;
 
-    console.log(`📡 Déclenchement du Cloud Build pour ${teamName}`);
-    console.log(`👥 Joueurs : ${players.join(", ")}`);
+    console.log(`📡 Création du serveur Minecraft pour l'équipe : ${teamName}`);
 
+<<<<<<< HEAD
     if (!teamName || !players || players.length !== 4) {
         console.error(`❌ Erreur : Données invalides`);
         return res.status(400).send({ error: "Données invalides" });
@@ -38,15 +36,16 @@ exports.createSpigotServer = async (req, res) => {
                     ]
                 }
             ]
+=======
+    // 🔥 Exécuter Terraform pour créer l’instance Spigot
+    exec(`terraform apply -var='team_name=${teamName}' -auto-approve`, (err, stdout, stderr) => {
+        if (err) {
+            console.error(`❌ Erreur Terraform: ${stderr}`);
+            return res.status(500).send({ error: stderr });
+>>>>>>> 241047b (ct mieu avant)
         }
-    };
 
-    try {
-        const [operation] = await client.createBuild(buildRequest);
-        console.log(`✅ Cloud Build lancé pour ${teamName}`);
-        res.status(200).send({ message: `Terraform lancé via Cloud Build pour ${teamName}` });
-    } catch (error) {
-        console.error(`❌ Erreur Cloud Build: ${error}`);
-        res.status(500).send({ error: error.message });
-    }
+        console.log(`✅ Serveur Spigot pour ${teamName} créé !`);
+        res.status(200).send({ message: `Serveur pour ${teamName} créé !`, logs: stdout });
+    });
 };
