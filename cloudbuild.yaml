@@ -6,7 +6,7 @@ steps:
 
   # Étape 2 : Déployer les Cloud Functions
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['functions', 'deploy', 'createSpigotServer', '--runtime', 'nodejs14', '--trigger-http', '--allow-unauthenticated', '--entry-point', 'createSpigotServer', '--region', 'YOUR_REGION', '--memory', '256MB']
+    args: ['functions', 'deploy', 'createSpigotServer', '--runtime', 'nodejs14', '--trigger-http', '--allow-unauthenticated', '--entry-point', 'createSpigotServer', '--region', 'europe-west-9', '--memory', '256MB']
     dir: 'cloud-functions/src'
 
   # Étape 3 : Initialiser Terraform
@@ -23,7 +23,7 @@ steps:
 
   # Étape 5 : Déployer le script Google Apps
   - name: 'gcr.io/cloud-builders/gcloud'
-    args: ['apps', 'deploy', '--project', 'YOUR_GCP_PROJECT_ID']
+    args: ['apps', 'deploy', '--project', 'glowing-road-451209-k6']
     dir: 'scripts'
 
 # Définir les substitutions pour les variables d'environnement
