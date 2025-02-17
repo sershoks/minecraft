@@ -17,7 +17,7 @@ exports.createSpigotServer = async (req, res) => {
 
     // ✅ Déclencher Cloud Build en passant les variables Terraform
     const buildRequest = {
-        projectId: "YOUR_PROJECT_ID",
+        projectId: "glowing-road-451209-k6",
         build: {
             steps: [
                 {
@@ -38,7 +38,6 @@ exports.createSpigotServer = async (req, res) => {
                 }
             ],
             timeout: "120s",
-            logsBucket: "gs://YOUR_CLOUD_BUILD_LOG_BUCKET"
         }
     };
 
