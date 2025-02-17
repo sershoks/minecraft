@@ -12,7 +12,7 @@ steps:
   # Étape 3 : Initialiser et Appliquer Terraform
   - name: 'hashicorp/terraform:latest'
     args: ['init']
-    dir: 'terraform'
+    dir: 'Infrastructure/Terraform'
 
   - name: 'hashicorp/terraform:latest'
     args: [
@@ -24,7 +24,7 @@ steps:
         '-var=player3=$_PLAYER3',
         '-var=player4=$_PLAYER4'
     ]
-    dir: 'terraform'
+    dir: 'Infrastructure/Terraform'
     env:
       - 'GOOGLE_CREDENTIALS=$$GCP_SA_KEY'
 
