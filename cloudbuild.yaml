@@ -1,0 +1,35 @@
+steps:
+  # Étape 1 : Installer les dépendances pour les Cloud Functions
+  - name: 'gcr.io/cloud-builders/npm'
+    args: ['install']
+    dir: 'cloud-functions/src'
+
+  # Étape 2 : Déployer les Cloud Functions
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['functions', 'deploy', 'createSpigotServer', '--runtime', 'nodejs14', '--trigger-http', '--allow-unauthenticated', '--entry-point', 'createSpigotServer', '--region', 'YOUR_REGION', '--memory', '256MB']
+    dir: 'cloud-functions/src'
+
+  # Étape 3 : Initialiser Terraform
+  - name: 'hashicorp/terraform:latest'
+    args: ['init']
+    dir: 'terraform'
+
+  # Étape 4 : Appliquer la configuration Terraform
+  - name: 'hashicorp/terraform:latest'
+    args: ['apply', '-auto-approve']
+    dir: 'terraform'
+    env:
+      - 'GOOGLE_CREDENTIALS=$$GCP_SA_KEY'
+
+  # Étape 5 : Déployer le script Google Apps
+  - name: 'gcr.io/cloud-builders/gcloud'
+    args: ['apps', 'deploy', '--project', 'YOUR_GCP_PROJECT_ID']
+    dir: 'scripts'
+
+# Définir les substitutions pour les variables d'environnement
+substitutions:
+  _GCP_SA_KEY: 'YOUR_SERVICE_ACCOUNT_KEY'
+
+# Définir les images à construire (optionnel)
+images:
+  - 'gcr.io/$PROJECT_ID/your-image:latest'
