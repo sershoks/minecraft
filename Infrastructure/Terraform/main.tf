@@ -1,7 +1,13 @@
+# Utilisez une data source pour récupérer les credentials depuis Secret Manager
+data "google_secret_manager_secret_version" "credentials" {
+  name = "projects/649751663521/secrets/ServiceAccountJSON/versions/1"
+}
+
+# Configurez le provider Google en utilisant les credentials récupérés
 provider "google" {
+  credentials = base64decode(data.google_secret_manager_secret_version.credentials.secret_data)
   project = "glowing-road-451209-k6"
   region  = "europe-west9"  # Région Paris
-  credentials = "projects/649751663521/secrets/ServiceAccountJSON/versions/1"
 }
 
 resource "google_compute_instance" "bungeecord" {
