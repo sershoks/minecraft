@@ -1,6 +1,6 @@
 provider "google" {
-  project = "minecraft"
-  region  = "europe-west1"  # Région Paris
+  project = "glowing-road-451209-k6"
+  region  = "europe-west9"  # Région Paris
 }
 
 variable "team_name" {}
@@ -8,7 +8,7 @@ variable "team_name" {}
 resource "google_compute_instance" "bungeecord" {
   name         = "bungeecord-${var.team_name}"
   machine_type = "e2-micro"
-  zone         = "europe-west1-b"  # Zone Paris
+  zone         = "europe-west9-c"  # Zone Paris
 
   network_interface {
     network    = "default"
