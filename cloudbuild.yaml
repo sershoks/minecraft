@@ -26,7 +26,7 @@ steps:
     ]
     dir: 'Infrastructure/Terraform'
     env:
-      - 'GOOGLE_CREDENTIALS=$$GCP_SA_KEY'
+      - 'GOOGLE_CREDENTIALS=$GCP_SA_KEY'
 
   # Étape 4 : Déployer le script Google Apps
   - name: 'gcr.io/cloud-builders/gcloud'
