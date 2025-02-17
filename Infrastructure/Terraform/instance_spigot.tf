@@ -1,21 +1,12 @@
-variable "team_name" {}
-
-provider "google" {
-  project = "minecraft"
-  region  = "europe-west9-b"
-}
-
 resource "google_compute_instance" "spigot" {
   name         = "spigot-${var.team_name}"
   machine_type = "e2-micro"
-  zone         = "europe-west9-b"
-  
+  zone         = "europe-west1-b"  # Zone Paris
+
   network_interface {
-    network = "default"
+    network    = "default"
     subnetwork = "default"
-    access_config {
-      # Pas d'IP publique, donc pas de configuration ici
-    }
+    access_config {}
   }
 
   boot_disk {
