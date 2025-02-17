@@ -1,0 +1,29 @@
+- name: Installer BungeeCord Proxy
+  hosts: bungeecord
+  become: true
+  tasks:
+
+    - name: Mise à jour du système
+      apt:
+        update_cache: yes
+
+    - name: Installer Java
+      apt:
+        name: openjdk-17-jdk
+        state: present
+
+    - name: Télécharger BungeeCord
+      shell: |
+        mkdir -p /opt/bungeecord
+        cd /opt/bungeecord
+        curl -o BungeeCord.jar https://ci.md-5.net/job/BungeeCord/lastSuccessfulBuild/artifact/bootstrap/target/BungeeCord.jar
+
+    - name: Configurer BungeeCord (config.yml)
+      template:
+        src: config_bungeecord.yml.j2
+        dest: /opt/bungeecord/config.yml
+
+    - name: Démarrer BungeeCord
+      shell: |
+        cd /opt/bungeecord
+        java -jar BungeeCord.jar &
