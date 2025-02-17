@@ -12,12 +12,22 @@ steps:
   # Étape 3 : Initialiser Terraform
   - name: 'hashicorp/terraform:latest'
     args: ['init']
+  - name: 'hashicorp/terraform:latest'
+    args: [
+        'apply',
+        '-auto-approve',
+        '-var=team_name=$TEAM_NAME',
+        '-var=player1=$PLAYER1',
+        '-var=player2=$PLAYER2',
+        '-var=player3=$PLAYER3',
+        '-var=player4=$PLAYER4'
+    ]
     dir: 'terraform'
 
-  # Étape 4 : Appliquer la configuration Terraform
+  # Étape 4 : Appliquer la configuration Terraform avec la variable
   - name: 'hashicorp/terraform:latest'
-    args: ['apply', '-auto-approve' , '-var=team_name=TEST']
-    dir: 'Infrastructure/Terraform/'
+    args: ['apply', '-var=team_name=$_TEAM_NAME', '-auto-approve']
+    dir: 'terraform'
     env:
       - 'GOOGLE_CREDENTIALS=$$GCP_SA_KEY'
 
@@ -27,7 +37,13 @@ steps:
     dir: 'scripts'
 
 # Définir les substitutions pour les variables d'environnement
-substitutions:
+substitutions: 
+
+  _TEAM_NAME: ''
+  _PLAYER1: ''
+  _PLAYER2: ''
+  _PLAYER3: ''
+  _PLAYER4: ''
   _GCP_SA_KEY: 'YOUR_SERVICE_ACCOUNT_KEY'
 
 # Définir les images à construire (optionnel)
