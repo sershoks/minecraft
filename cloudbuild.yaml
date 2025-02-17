@@ -17,7 +17,7 @@ steps:
   # Étape 4 : Appliquer la configuration Terraform
   - name: 'hashicorp/terraform:latest'
     args: ['apply', '-auto-approve']
-    dir: 'terraform'
+    dir: 'Infrastructure/Terraform/'
     env:
       - 'GOOGLE_CREDENTIALS=$$GCP_SA_KEY'
 
