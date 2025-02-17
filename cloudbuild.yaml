@@ -33,3 +33,6 @@ substitutions:
 # Définir les images à construire (optionnel)
 images:
   - 'gcr.io/$PROJECT_ID/your-image:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
