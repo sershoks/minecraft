@@ -3,6 +3,14 @@ provider "google" {
   region  = "europe-west9"  # Région Paris
 }
 
+data "google_secret_manager_secret_version" "credentials" {
+  name = "projects/649751663521/secrets/ServiceAccountJSON/versions/1"
+}
+
+provider "google" {
+  credentials = base64decode(data.google_secret_manager_secret_version.credentials.secret_data)
+}
+
 resource "google_compute_instance" "bungeecord" {
   name         = "bungeecord-${var.team_name}"
   machine_type = "e2-micro"
