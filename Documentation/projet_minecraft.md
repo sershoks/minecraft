@@ -73,11 +73,35 @@ Le serveur **API** joue un rôle clé dans l'automatisation de la création des 
   - Configure les règles de pare-feu pour autoriser les connexions aux ports nécessaires (par exemple, 25565 pour Minecraft).
 - Terraform garantit que la création du serveur est reproductible et cohérente à chaque fois.
 
+- Voici le script **Google Cloud Function** :
+```hcl
+const { exec } = require("child_process");
+
+exports.createSpigotServer = async (req, res) => {
+    const teamData = req.body;
+    const teamName = teamData.name.toLowerCase().replace(/\s/g, "-");
+    const players = teamData.players;
+
+    console.log(`📡 Création du serveur Minecraft pour l'équipe : ${teamName}`);
+
+    // 🔥 Exécuter Terraform pour créer l’instance Spigot
+    exec(`terraform apply -var='team_name=${teamName}' -auto-approve`, (err, stdout, stderr) => {
+        if (err) {
+            console.error(`❌ Erreur Terraform: ${stderr}`);
+            return res.status(500).send({ error: stderr });
+        }
+
+        console.log(`✅ Serveur Spigot pour ${teamName} créé !`);
+        res.status(200).send({ message: `Serveur pour ${teamName} créé !`, logs: stdout });
+    });
+};
+```
+
 **Avantages** :
 - Provisionnement automatisé de l'infrastructure sur **Google Cloud**.
 - Reproductibilité et gestion de l'infrastructure en versionnant le code **Terraform**.
   
-   - Voici un extrait du fichier **Terraform** pour la création d'un serveur **Spigot** :
+   - Voici un extrait du fichier **Terraform - instance_spigot.tf** pour la création d'un serveur **Spigot** :
 
 ```hcl
 provider "google" {
@@ -136,6 +160,36 @@ resource "google_compute_firewall" "allow_minecraft" {
   }
 
   source_ranges = ["0.0.0.0/0"]
+}
+
+```
+
+ - Voici un extrait du fichier **Terraform - variables.tf** pour la création d'un serveur **Spigot** :
+
+```hcl
+variable "team_name" {
+  description = "The name of the team"
+  type        = string
+}
+
+variable "player1" {
+  description = "The name of player 1"
+  type        = string
+}
+
+variable "player2" {
+  description = "The name of player 2"
+  type        = string
+}
+
+variable "player3" {
+  description = "The name of player 3"
+  type        = string
+}
+
+variable "player4" {
+  description = "The name of player 4"
+  type        = string
 }
 
 ```
