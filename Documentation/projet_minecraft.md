@@ -60,19 +60,6 @@ Le serveur **API** joue un rôle clé dans l'automatisation de la création des 
 - Automatisation complète du processus de création des serveurs Minecraft.
 - Centralisation de la logique de gestion des serveurs.
 
----
-
-### 4. Terraform
-
-**Terraform** est un outil d'infrastructure en tant que code (IaC) qui permet de provisionner des ressources sur **Google Cloud**. Dans ce projet, il est utilisé pour créer des instances **Spigot** pour chaque équipe.
-
-**Fonctionnement** :
-- Lorsqu'une équipe s'inscrit, la **Google Cloud Function** déclenche un script Terraform qui :
-  - Crée une instance **Google Compute Engine** pour le serveur Minecraft.
-  - Installe **Spigot** sur cette instance.
-  - Configure les règles de pare-feu pour autoriser les connexions aux ports nécessaires (par exemple, 25565 pour Minecraft).
-- Terraform garantit que la création du serveur est reproductible et cohérente à chaque fois.
-
 - Voici le script **Google Cloud Function** :
 ```hcl
 const { exec } = require("child_process");
@@ -96,6 +83,18 @@ exports.createSpigotServer = async (req, res) => {
     });
 };
 ```
+---
+
+### 4. Terraform
+
+**Terraform** est un outil d'infrastructure en tant que code (IaC) qui permet de provisionner des ressources sur **Google Cloud**. Dans ce projet, il est utilisé pour créer des instances **Spigot** pour chaque équipe.
+
+**Fonctionnement** :
+- Lorsqu'une équipe s'inscrit, la **Google Cloud Function** déclenche un script Terraform qui :
+  - Crée une instance **Google Compute Engine** pour le serveur Minecraft.
+  - Installe **Spigot** sur cette instance.
+  - Configure les règles de pare-feu pour autoriser les connexions aux ports nécessaires (par exemple, 25565 pour Minecraft).
+- Terraform garantit que la création du serveur est reproductible et cohérente à chaque fois.
 
 **Avantages** :
 - Provisionnement automatisé de l'infrastructure sur **Google Cloud**.
