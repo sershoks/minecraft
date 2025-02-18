@@ -1,13 +1,12 @@
-# Configurez le provider Google en utilisant les credentials récupérés
 provider "google" {
   project = "glowing-road-451209-k6"
-  region  = "europe-west9"  # Région Paris
+  region  = "europe-west9"
 }
 
 resource "google_compute_instance" "bungeecord" {
   name         = "bungeecord-${var.team_name}"
   machine_type = "e2-micro"
-  zone         = "europe-west9-c"  # Zone Paris
+  zone         = "europe-west9-c"
 
   network_interface {
     network    = "default"
