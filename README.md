@@ -1,7 +1,10 @@
 # Minecraft
 ![Contributors](https://img.shields.io/github/contributors/sershoks/minecraft?color=darkgreen) ![Issues](https://img.shields.io/github/issues/sershoks/minecraft?color=red) ![License](https://img.shields.io/github/license/sershoks/minecraft?color=yellow)
 
+# Lien important :
 
+- Le formulaire d'inscription : https://docs.google.com/forms/d/e/1FAIpQLSeEdUBzZdCnnKzF2aierP9rTTsIW4L790UjOhnekwN67AxqeQ/viewform
+- L'ip du serveur : 34.155.14.195
 ## Contexte:
 Vous êtes une société informatique spécialisée dans le Cloud et les pratiques DevOps. Une association de jeu vous contacte pour les aider à mettre en place l’infrastructure nécessaire pour leur nouvel évènement qui aura lieu dans quelques semaines.
 L'événement consiste pour les participants à répliquer des monuments français dans minecrafts.
