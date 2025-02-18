@@ -52,6 +52,7 @@ Le **BungeeCord** est un serveur proxy Minecraft qui permet de gérer plusieurs 
 ### 3. Serveur API
 
 Le serveur **API** est dédiée est au cœur de l'automatisation. Elle récupère les inscriptions des équipes du **Google Forms** notamment le nom de l'équipe et les joueurs, et exécute les scripts nécessaires pour créer et configurer un serveur **Spigot** sur Google Cloud.
+Plusieurs **fonctions** essentielles sont également présentes sur le serveur API pour assurer son bon fonctionnement.
 
 **Fonctionnement** :
 - Une requête **POST** est envoyée à l'API avec les informations de l'équipe.
@@ -100,6 +101,14 @@ app.post('/create-spigot-server', (req, res) => {
   });
 });
 ```
+**Fonctions** :
+- add_whitelist.yml
+- ajout-user-wl.sh
+- app.js
+- generate_inventory.sh
+- output.tf
+- setup-terraform.sh
+- update_bungeerecord.sh
 ---
 
 ### 4. Terraform
