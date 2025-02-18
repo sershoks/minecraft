@@ -101,7 +101,7 @@ app.post('/create-spigot-server', (req, res) => {
   });
 });
 ```
-**Fonctions** :
+**Fonctions du Serveur API** :
 - add_whitelist.yml
 - ajout-user-wl.sh
 - app.js
