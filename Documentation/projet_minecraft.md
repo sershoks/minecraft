@@ -33,13 +33,13 @@ Le **BungeeCord** est un serveur proxy Minecraft qui permet de gérer plusieurs 
 - Centralisation de la gestion des connexions.
 - Facilité de gestion de plusieurs serveurs Minecraft sans interruption de service.
 
-   - Voici un extrait du fichier **BungeeCord - Start-all.sh** pour démarrer le Serveur **BungeeCord** :
+- Voici un extrait du fichier **BungeeCord - Start-all.sh** pour démarrer le Serveur **BungeeCord** :
      
 ```hcl
 cd /root/bungeecord
 screen -dmS bungee java -jar /root/bungeecord/BungeeCord.ja
 ```
-   - Voici un extrait du fichier **BungeeCord - Stop-all.sh** pour stopper le Serveur **BungeeCord** :
+- Voici un extrait du fichier **BungeeCord - Stop-all.sh** pour stopper le Serveur **BungeeCord** :
 ```hcl
 /usr/bin/screen -S bungee -X stuff "end$(echo -ne '\r')"
 ```
