@@ -2,7 +2,9 @@
 
 ## Résumé du Projet
 
-Ce projet consiste à créer une infrastructure pour un jeu Minecraft avec un serveur de redirection **BungeeCord** et des serveurs **Spigot** pour chaque équipe, entièrement automatisée via **Terraform** et **Google Cloud**. L'inscription des équipes et de leurs joueurs sera effectuée via un formulaire **Google Forms**, les données seront stockées dans **Google Sheets** et gérées dans **Firestore**, avec des **Google Cloud Functions** déclenchant la création des serveurs Spigot.
+Ce projet vise à automatiser la gestion et le déploiement de serveurs Minecraft sur **Google Cloud**. Il repose sur une architecture centralisée autour d’un serveur **BungeeCord** qui redirige les joueurs vers des serveurs **Spigot** dédiés à chaque équipe.
+
+L'inscription des équipes se fait via **Google Forms**, avec un stockage des données dans **Google Sheets**. Un serveur **API** récupère ces données et déclenche un processus d’automatisation qui utilise **Terraform** pour provisionner dynamiquement des serveurs **Spigot**.
 
 ---
 
