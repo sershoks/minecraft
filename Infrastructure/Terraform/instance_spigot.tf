@@ -1,3 +1,7 @@
+provider "google" {
+  project = "glowing-road-451209-k6"
+  region  = "europe-west9"
+}
 resource "google_compute_instance" "spigot" {
   name         = "spigot-${var.team_name}"
   machine_type = "e2-micro"
