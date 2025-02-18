@@ -277,19 +277,19 @@ Le projet repose déjà sur **Terraform** pour provisionner et gérer les ressou
   become: yes
   tasks:
     - name: Ajouter {{ player1 }} à la whitelist
-      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player1 }}'"
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'damada' 'whitelist add {{ player1 }}'"
 
     - name: Ajouter {{ player2 }} à la whitelist
-      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player2 }}'"
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'damada' 'whitelist add {{ player2 }}'"
 
     - name: Ajouter {{ player3 }} à la whitelist
-      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player3 }}'"
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'damada' 'whitelist add {{ player3 }}'"
 
     - name: Ajouter {{ player4 }} à la whitelist
-      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player4 }}'"
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'damada' 'whitelist add {{ player4 }}'"
 
     - name: Sauvegarder la whitelist
-      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist reload'"
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'damada' 'whitelist reload'"
 ```
 ### 6. Persistance des Données
 
