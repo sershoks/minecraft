@@ -52,36 +52,51 @@ Le **BungeeCord** est un serveur proxy Minecraft qui permet de gérer plusieurs 
 Le serveur **API** joue un rôle clé dans l'automatisation de la création des serveurs Minecraft. Il prend les données des **Google Forms**, notamment le nom de l'équipe et les joueurs, et utilise ces informations pour créer un serveur **Spigot**.
 
 **Fonctionnement** :
-- Lorsqu'une équipe s'inscrit via **Google Forms**, une **Google Cloud Function** est déclenchée.
-- Cette fonction récupère les données et utilise **Terraform** pour créer un serveur Minecraft dédié à l'équipe.
-- Le serveur API est également responsable de la gestion des erreurs et de l'envoi de réponses appropriées à l'utilisateur.
+- Lorsqu'une équipe s'inscrit via **Google Forms**, une **API depuis le Serveur API** est déclenchée.
+- Cette API récupère les données et utilise **Terraform** pour créer un serveur Minecraft dédié à l'équipe.
+- Le serveur API est responsable de la gestion des erreurs et de l'envoi de réponses appropriées à l'utilisateur.
 
 **Avantages** :
 - Automatisation complète du processus de création des serveurs Minecraft.
 - Centralisation de la logique de gestion des serveurs.
 
-- Voici le script **Google Cloud Function** :
+- Voici le **Code de l'API** :
 ```hcl
-const { exec } = require("child_process");
+const express = require('express');
+const { exec } = require('child_process');
+const app = express();
+const port = 3000;
 
-exports.createSpigotServer = async (req, res) => {
-    const teamData = req.body;
-    const teamName = teamData.name.toLowerCase().replace(/\s/g, "-");
-    const players = teamData.players;
+app.use(express.json());
 
-    console.log(`📡 Création du serveur Minecraft pour l'équipe : ${teamName}`);
+app.post('/create-spigot-server', (req, res) => {
+  const { team_name } = req.body;
+  console.log(Received request to create server for team: ${team_name});
 
-    // 🔥 Exécuter Terraform pour créer l’instance Spigot
-    exec(`terraform apply -var='team_name=${teamName}' -auto-approve`, (err, stdout, stderr) => {
-        if (err) {
-            console.error(`❌ Erreur Terraform: ${stderr}`);
-            return res.status(500).send({ error: stderr });
-        }
+  // Appeler le script shell pour gérer l'interaction avec Terraform
+  const terraformProcess = exec(./setup-terraform.sh ${team_name}, (err, stdout, stderr) => {
+    if (err) {
+      console.error(Terraform error: ${stderr});
+      return res.status(500).send({ error: stderr });
+    }
+    console.log(Terraform output: ${stdout});
 
-        console.log(`✅ Serveur Spigot pour ${teamName} créé !`);
-        res.status(200).send({ message: `Serveur pour ${teamName} créé !`, logs: stdout });
-    });
-};
+    // Extraire l'adresse IP externe de la sortie
+    const ipMatch = stdout.match(/spigot_external_ip\s=\s(\S+)/);
+    const externalIp = ipMatch ? ipMatch[1] : 'IP non trouvée';
+
+    res.send({ message: 'Serveur créé !', logs: stdout, external_ip: externalIp });
+  });
+
+  // Afficher les logs en temps réel
+  terraformProcess.stdout.on('data', (data) => {
+    console.log(Terraform stdout: ${data});
+  });
+
+  terraformProcess.stderr.on('data', (data) => {
+    console.error(Terraform stderr: ${data});
+  });
+});
 ```
 ---
 
