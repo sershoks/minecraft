@@ -1,0 +1,19 @@
+---
+- name: Ajouter des joueurs à la whitelist Minecraft
+  hosts: minecraft
+  become: yes
+  tasks:
+    - name: Ajouter {{ player1 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player1 }}'"
+
+    - name: Ajouter {{ player2 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player2 }}'"
+
+    - name: Ajouter {{ player3 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player3 }}'"
+
+    - name: Ajouter {{ player4 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player4 }}'"
+
+    - name: Sauvegarder la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist reload'"
