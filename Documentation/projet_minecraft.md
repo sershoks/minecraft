@@ -7,8 +7,7 @@ Ce projet consiste à créer une infrastructure pour un jeu Minecraft avec un se
 ### Composants du Projet :
 1. **BungeeCord** : Serveur de redirection pour l'accès aux différents serveurs Spigot.
 2. **Google Forms & Sheets** : Formulaire d'inscription des équipes et stockage des données.
-3. **Google Firestore** : Base de données pour gérer les équipes et les joueurs.
-4. **Google Cloud Functions** : Automatisation de la création des serveurs Spigot à partir des données du formulaire.
+4. **Serveur API** : Automatisation de la création des serveurs Spigot à partir des données du formulaire.
 5. **Terraform** : Provisionnement de l'infrastructure des serveurs Spigot.
 6. **Persistance des données** : Sauvegarde des mondes Minecraft pour éviter la perte de données.
 
@@ -47,53 +46,11 @@ Les données collectées depuis Google Sheets seront transférées vers **Google
    
 ---
 
-## Étape 3 : Déclenchement Automatique de la Création des Serveurs Spigot
+## Étape 4 : Serveur API
 
-### Google Cloud Function
-1. **Cloud Function** en Node.js sera utilisée pour écouter les inscriptions sur Firestore et déclencher la création des serveurs Spigot.
-2. **Vérification des joueurs uniques** : 
-   - La Cloud Function vérifiera si les pseudos sont déjà utilisés dans Firestore.
-   - Si un pseudo est déjà enregistré, l'inscription sera rejetée avec un message d'erreur.
-3. **Création du serveur Spigot** :
-   - Une fois l'équipe validée, la Cloud Function exécutera Terraform pour créer un serveur Spigot.
-   - Le nom du serveur sera basé sur le nom de l'équipe.
+### Configuration du Serveur API
 
----
-
-## Étape 4 : Provisionnement des Serveurs avec Terraform
-
-### Configuration du Serveur BungeeCord
-
-Le serveur de redirection **BungeeCord** sera créé à l'aide de **Terraform** sur Google Cloud.
-
-```hcl
-provider "google" {
-  project = "minecraft-project"
-  region  = "europe-west9"
-}
-
-resource "google_compute_instance" "bungeecord" {
-  name         = "bungeecord-proxy"
-  machine_type = "e2-medium"
-  zone         = "europe-west9-b"
-
-  boot_disk {
-    initialize_params {
-      image = "debian-cloud/debian-12"
-    }
-  }
-
-  network_interface {
-    network = "default"
-  }
-
-  metadata = {
-    ssh-keys = "your-ssh-user:ssh-rsa AAAAB3..."
-  }
-
-  tags = ["bungeecord"]
-}
-
+Le serveur API à pour but de récupérer les données du formulaire et de récuperé les variables pour générer les VM
 output "bungeecord_ip" {
   value = google_compute_instance.bungeecord.network_interface[0].access_config[0].nat_ip
 }
