@@ -49,16 +49,16 @@ Le **BungeeCord** est un serveur proxy Minecraft qui permet de gérer plusieurs 
 
 ### 3. Serveur API
 
-Le serveur **API** joue un rôle clé dans l'automatisation de la création des serveurs Minecraft. Il prend les données des **Google Forms**, notamment le nom de l'équipe et les joueurs, et utilise ces informations pour créer un serveur **Spigot**.
+Le serveur **API** est dédiée est au cœur de l'automatisation. Elle récupère les inscriptions des équipes du **Google Forms** notamment le nom de l'équipe et les joueurs, et exécute les scripts nécessaires pour créer et configurer un serveur **Spigot** sur Google Cloud.
 
 **Fonctionnement** :
-- Lorsqu'une équipe s'inscrit via **Google Forms**, une **API depuis le Serveur API** est déclenchée.
-- Cette API récupère les données et utilise **Terraform** pour créer un serveur Minecraft dédié à l'équipe.
-- Le serveur API est responsable de la gestion des erreurs et de l'envoi de réponses appropriées à l'utilisateur.
+- Une requête **POST** est envoyée à l'API avec les informations de l'équipe.
+- L'API appelle un script **Terraform** pour provisionner un serveur dédié.
+- Le serveur API est responsable de la gestion des erreurs et de l'envoi de réponses appropriées à l'utilisateur avec l'adresse IP du serveur créé.
 
 **Avantages** :
 - Automatisation complète du processus de création des serveurs Minecraft.
-- Centralisation de la logique de gestion des serveurs.
+- Gestion centralisée via une API unique.
 
 - Voici le **Code de l'API** :
 ```hcl
