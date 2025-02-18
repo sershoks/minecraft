@@ -14,7 +14,8 @@ L'inscription des équipes se fait via **Google Forms**, avec un stockage des do
 2. **Google Forms & Sheets**
 3. **Serveur API**
 4. **Terraform**
-5. **Persistance des Données**
+5. **Ansible**
+6. **Persistance des Données**
 
 ---
 
@@ -243,7 +244,44 @@ variable "player4" {
 ```
 ---
 
-### 5. Persistance des Données
+### 5. Ansible
+
+## Pourquoi Ansible a été intégré ?
+
+Le projet repose déjà sur **Terraform** pour provisionner et gérer les ressources dans **Google Cloud**. Cependant, **Terraform** est principalement axé sur la gestion des infrastructures, c’est-à-dire la création des ressources (serveurs, réseaux, etc.), et il manque une couche pour gérer la configuration des serveurs après leur création. C'est là qu'**Ansible** entre en jeu, pour la gestion des configurations des serveurs Minecraft et des tâches récurrentes, telles que l'installation et la configuration de logiciels, la mise en place de règles spécifiques, ou encore la gestion des utilisateurs sur les serveurs.
+
+### Les rôles complémentaires de Terraform et Ansible
+
+- **Terraform** : Permet de déployer et configurer l'infrastructure cloud (serveurs, réseaux, etc.).
+- **Ansible** : Gère la configuration des serveurs une fois qu'ils sont provisionnés par Terraform, en automatisant des tâches comme :
+  - Installation de logiciels nécessaires (par exemple, Spigot, Java).
+  - Configuration de paramètres système spécifiques.
+  - Automatisation des tâches récurrentes de maintenance ou d'administration (comme la mise à jour des plugins, la gestion des utilisateurs ou l’ajout à des listes blanches).
+  
+
+   - Voici un extrait du fichier **Ansible - add_whitelist.yml** :
+
+```hcl
+- name: Ajouter des joueurs à la whitelist Minecraft
+  hosts: minecraft
+  become: yes
+  tasks:
+    - name: Ajouter {{ player1 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player1 }}'"
+
+    - name: Ajouter {{ player2 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player2 }}'"
+
+    - name: Ajouter {{ player3 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player3 }}'"
+
+    - name: Ajouter {{ player4 }} à la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist add {{ player4 }}'"
+
+    - name: Sauvegarder la whitelist
+      shell: "mcrcon -H 127.0.0.1 -P 25575 -p 'ton_mdp_rcon' 'whitelist reload'"
+```
+### 6. Persistance des Données
 
 La persistance des données est essentielle pour garantir que les mondes Minecraft des joueurs ne soient pas perdus. Les mondes Minecraft (les fichiers de sauvegarde des serveurs) sont sauvegardés dans **Google Cloud Storage**, ce qui permet de les récupérer en cas de réinitialisation du serveur ou de suppression accidentelle.
 
