@@ -25,3 +25,6 @@ Si le temps vous le permet, mettez en place un pipeline de déploiement continu 
 
 La plateforme n’est pas à mettre en ouvre techniquement, elle doit simplement faire partie
 du design de la solution.
+## Documentation
+
+https://github.com/sershoks/minecraft/tree/main/Documentation
