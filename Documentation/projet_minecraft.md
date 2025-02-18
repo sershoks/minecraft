@@ -2,55 +2,162 @@
 
 ## Résumé du Projet
 
-Ce projet consiste à créer une infrastructure pour un jeu Minecraft avec un serveur de redirection **BungeeCord** et des serveurs **Spigot** pour chaque équipe, entièrement automatisée via Terraform et Google Cloud. L'inscription des équipes et de leurs joueurs sera effectuée via un formulaire **Google Form**, les données seront stockées dans **Google Sheets** et gérées dans **Firestore**, avec des **Cloud Functions** déclenchant la création des serveurs.
-
-### Composants du Projet :
-1. **BungeeCord** : Serveur de redirection pour l'accès aux différents serveurs Spigot.
-2. **Google Forms & Sheets** : Formulaire d'inscription des équipes et stockage des données.
-4. **Serveur API** : Automatisation de la création des serveurs Spigot à partir des données du formulaire.
-5. **Terraform** : Provisionnement de l'infrastructure des serveurs Spigot.
-6. **Persistance des données** : Sauvegarde des mondes Minecraft pour éviter la perte de données.
+Ce projet consiste à créer une infrastructure pour un jeu Minecraft avec un serveur de redirection **BungeeCord** et des serveurs **Spigot** pour chaque équipe, entièrement automatisée via **Terraform** et **Google Cloud**. L'inscription des équipes et de leurs joueurs sera effectuée via un formulaire **Google Forms**, les données seront stockées dans **Google Sheets** et gérées dans **Firestore**, avec des **Google Cloud Functions** déclenchant la création des serveurs Spigot.
 
 ---
 
-## Étape 1 : Création du Formulaire Google
+## Composants du Projet
 
-1. **Créer un formulaire Google** pour permettre aux joueurs de s'inscrire.
-   - **Champs nécessaires** :
-     - Nom de l'équipe.
-     - Pseudos des 4 joueurs de l'équipe.
-   - Ce formulaire sera connecté à un **Google Sheet** pour collecter les réponses.
-
-2. **Google Sheet** : 
-   - Lien entre le formulaire et la feuille de calcul.
-   - Les colonnes suivantes seront créées :
-     - `Nom de l'équipe`
-     - `Pseudo 1`
-     - `Pseudo 2`
-     - `Pseudo 3`
-     - `Pseudo 4`
-
-3. **Vérification des pseudos** : 
-   - Lors de l'inscription via le formulaire, les pseudos des joueurs seront vérifiés pour s'assurer qu'un joueur ne s'inscrit pas deux fois.
+1. **BungeeCord**
+2. **Google Forms & Sheets**
+3. **Serveur API**
+4. **Terraform**
+5. **Persistance des Données**
 
 ---
 
-## Étape 2 : Stockage des Données dans Google Firestore
+## Détails des Composants
 
-Les données collectées depuis Google Sheets seront transférées vers **Google Firestore** pour une gestion centralisée et un accès facile par la suite.
+### 1. BungeeCord
 
-1. **Structure de la base Firestore** :
-   - Collection `teams` avec des documents représentant chaque équipe, contenant :
-     - `team_name` : le nom de l'équipe.
-     - `players` : tableau contenant les pseudos des joueurs.
-   
+Le **BungeeCord** est un serveur proxy Minecraft qui permet de gérer plusieurs serveurs **Spigot** sous un même réseau. Il joue un rôle crucial en redirigeant les joueurs vers les serveurs Minecraft appropriés en fonction des équipes, tout en offrant une gestion centralisée des connexions des joueurs.
+
+**Fonctionnement de BungeeCord** :
+- Lorsqu'un joueur se connecte à **BungeeCord**, il est automatiquement redirigé vers le serveur **Spigot** de l'équipe à laquelle il appartient.
+- **BungeeCord** permet de gérer plusieurs serveurs **Spigot** et de les relier entre eux, ce qui est essentiel pour ce projet où chaque équipe a son propre serveur Minecraft.
+
+**Avantages** :
+- Centralisation de la gestion des connexions.
+- Facilité de gestion de plusieurs serveurs Minecraft sans interruption de service.
+
 ---
 
-## Étape 4 : Serveur API
+### 2. Google Forms & Sheets
 
-### Configuration du Serveur API
+**Google Forms** est utilisé pour recueillir les informations des équipes et de leurs joueurs, notamment :
+- Le nom de l'équipe.
+- Les noms des joueurs.
 
-Le serveur API à pour but de récupérer les données du formulaire et de récuperé les variables pour générer les VM
-output "bungeecord_ip" {
-  value = google_compute_instance.bungeecord.network_interface[0].access_config[0].nat_ip
+**Google Sheets** sert de base de données primaire pour stocker ces informations. Une fois que le formulaire est rempli, les données sont automatiquement enregistrées dans une feuille **Google Sheets**. Cette feuille peut ensuite être utilisée par le serveur API pour créer les serveurs **Spigot**.
+
+**Fonctionnement** :
+- Les équipes remplissent le formulaire **Google Forms**.
+- Les données sont automatiquement transférées dans **Google Sheets**.
+- Ces données sont ensuite traitées par un script **API** pour créer des serveurs **Spigot** automatiquement.
+
+---
+
+### 3. Serveur API
+
+Le serveur **API** joue un rôle clé dans l'automatisation de la création des serveurs Minecraft. Il prend les données des **Google Forms**, notamment le nom de l'équipe et les joueurs, et utilise ces informations pour créer un serveur **Spigot**.
+
+**Fonctionnement** :
+- Lorsqu'une équipe s'inscrit via **Google Forms**, une **Google Cloud Function** est déclenchée.
+- Cette fonction récupère les données et utilise **Terraform** pour créer un serveur Minecraft dédié à l'équipe.
+- Le serveur API est également responsable de la gestion des erreurs et de l'envoi de réponses appropriées à l'utilisateur.
+
+**Avantages** :
+- Automatisation complète du processus de création des serveurs Minecraft.
+- Centralisation de la logique de gestion des serveurs.
+
+---
+
+### 4. Terraform
+
+**Terraform** est un outil d'infrastructure en tant que code (IaC) qui permet de provisionner des ressources sur **Google Cloud**. Dans ce projet, il est utilisé pour créer des instances **Spigot** pour chaque équipe.
+
+**Fonctionnement** :
+- Lorsqu'une équipe s'inscrit, la **Google Cloud Function** déclenche un script Terraform qui :
+  - Crée une instance **Google Compute Engine** pour le serveur Minecraft.
+  - Installe **Spigot** sur cette instance.
+  - Configure les règles de pare-feu pour autoriser les connexions aux ports nécessaires (par exemple, 25565 pour Minecraft).
+- Terraform garantit que la création du serveur est reproductible et cohérente à chaque fois.
+
+**Avantages** :
+- Provisionnement automatisé de l'infrastructure sur **Google Cloud**.
+- Reproductibilité et gestion de l'infrastructure en versionnant le code **Terraform**.
+  
+   - Voici un extrait du fichier **Terraform** pour la création d'un serveur **Spigot** :
+
+```hcl
+provider "google" {
+  project = "glowing-road-451209-k6"
+  region  = "europe-west9"
+
+resource "google_compute_instance" "spigot" {
+  name         = "spigot-${replace(lower(var.teamname), "", "-")}"  # Remplacer _ par -
+  machine_type = "e2-micro"
+  zone         = "europe-west9-c"  # Zone Paris
+
+  network_interface {
+    network    = "default"
+    subnetwork = "default"
+    access_config {}
+  }
+
+  boot_disk {
+    initialize_params {
+      image = "debian-cloud/debian-12"
+    }
+  }
+
+  metadata = {
+    ssh-keys = "your-ssh-user:ssh-rsa AAAAB3..."  # Remplace "your-ssh-user" et la clé SSH par la tienne
+  }
+
+  tags = ["spigot"]
+
+  metadata_startup_script = <<EOT
+    #!/bin/bash
+    apt update && apt install -y openjdk-17-jdk wget screen
+    mkdir -p /opt/minecraft
+    cd /opt/minecraft
+    wget http://34.155.14.195/Spigot-1.20.1.jar -O spigot.jar
+    echo "eula=true" > eula.txt
+    screen -dmS minecraft java -Xmx512M -jar spigot.jar nogui
+  EOT
 }
+
+output "spigot_internal_ip" {
+  value = google_compute_instance.spigot.network_interface[0].network_ip
+}
+
+
+resource "google_compute_firewall" "allow_minecraft" {
+  name    = "allow-minecraft-ports"
+  network = "default"
+  priority = 1000
+  direction = "INGRESS"
+  target_tags = ["spigot"]
+
+  allow {
+    protocol = "tcp"
+    ports    = ["25565", "25567", "22"]
+  }
+
+  source_ranges = ["0.0.0.0/0"]
+}
+
+```
+---
+
+### 5. Persistance des Données
+
+La persistance des données est essentielle pour garantir que les mondes Minecraft des joueurs ne soient pas perdus. Les mondes Minecraft (les fichiers de sauvegarde des serveurs) sont sauvegardés dans **Google Cloud Storage**, ce qui permet de les récupérer en cas de réinitialisation du serveur ou de suppression accidentelle.
+
+**Fonctionnement** :
+- Chaque serveur **Spigot** effectue régulièrement des sauvegardes de ses mondes Minecraft.
+- Ces sauvegardes sont stockées dans **Google Cloud Storage**, où elles sont accessibles à tout moment.
+- Le processus de sauvegarde est automatisé grâce à des scripts qui s'exécutent sur les serveurs.
+
+**Avantages** :
+- Sécurisation des données des joueurs.
+- Sauvegarde régulière des mondes pour éviter la perte de données.
+
+---
+
+## Conclusion
+
+Ce projet offre une solution complète et automatisée pour la gestion de serveurs Minecraft. Grâce à des outils comme **BungeeCord**, **Google Forms**, **Terraform**, et **Google Cloud**, nous avons créé une infrastructure robuste pour gérer des équipes et leurs serveurs Minecraft de manière efficace et sécurisée. La persistance des données garantit la sécurité des mondes Minecraft, et l'automatisation via **API** et **Terraform** assure une gestion simple et sans erreur des ressources.
+
+Ce système est entièrement scalable et peut être adapté pour des compétitions ou des événements plus grands à l'avenir.
